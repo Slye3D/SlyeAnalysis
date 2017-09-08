@@ -48,6 +48,7 @@
     function data2ChartData(){
         let time            = parseInt(Date.now() / 1000)
         let endpoints       = Object.keys(data)
+        endpoints.sort()
         let d  = {
             ':total': [[]],
             'e': {}
@@ -79,6 +80,7 @@
         if(!data[endpoint])
             data[endpoint]  = {}
         data[endpoint][time] = parseInt(value)
+        data2ChartData()
     })
 
     $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }];

@@ -23,7 +23,7 @@ const CLIENTS   = {}
 const USERS     = []
 const Apps      = []
 
-function setUpHTTP(redis){
+function setUpHTTP(redis, SAD){
     const express   = require('express')
     const app       = express();
     const server    = require('http').Server(app);
@@ -44,20 +44,51 @@ function setUpHTTP(redis){
         let {app} = req.params
         let re = []
         fs.readdirSync(path.join(baseDir, app)).forEach(file => {
-            let stat = fs.lstatSync(path.join(baseDir, file))
+            let stat = fs.lstatSync(path.join(baseDir, app, file))
             if(stat.isFile())
-                re.push(path)
+                re.push(file)
         })
         res.json(re)
     })
 
-    app.all('/archives/:app/:file', function(req, res){
-        let {app, file} = res
-        let readableStream = fs.createReadStream(path.join(baseDir, app, file))
-        SAD.decode(readableStream).then(d => {
-            res.json(d)
-        })
-    })
+    function p(type){
+        return function(req, res){
+            let {app, file} = req.params
+
+            function proc(report){
+                let day = parseInt(parseInt(Date.now() / 1000) / (24 * 3600)) * 24 * 3600
+                let t = day == parseInt(file) ? 2 * 60 : 20 * 60
+                redis.expire('SA:SAD:' + app + ':' + file, t)
+
+                if(type == 'charts'){
+                    for(let endpoint in report.data){
+                        delete report.data[endpoint].pos
+                    }
+                    res.json(report)
+                }
+            }
+
+            redis.get('SA:SAD:' + app + ':' + file, function(err, re){
+                if(err)
+                    return res.status(500).send('Server error')
+                if(re)
+                    return proc(JSON.parse(re));
+                try{
+                    let readableStream = fs.createReadStream(path.join(baseDir, app, file))
+                    SAD.decode(readableStream).then(d => {
+                        proc(d)
+                        redis.set('SA:SAD:' + app + ':' + file, JSON.stringify(d))
+                        readableStream.close()
+                    })
+                }catch(e){
+                    res.status(404).send('404')
+                }
+            })
+        }
+    }
+
+    app.all('/archives/:app/:file', p('charts'))
+    app.all('/archives/:app/:file/pos/:zoom/:center', p('pos'))
 
     app.get('/*', function(req, res){
         res.sendFile(path.resolve('../view/index.html'))
@@ -152,7 +183,7 @@ if(cluster.isMaster){
     const redis     = require('redis').createClient()
     const geoip     = require('geoip-lite')
     const SAD       = require('../SAD')
-    setUpHTTP(redis)
+    setUpHTTP(redis, SAD)
     try{
         try{mkdirp.sync(baseDir)}catch(e){}
         fs.readdirSync(baseDir).forEach(file => {
@@ -217,6 +248,7 @@ if(cluster.isMaster){
     }
 
     function saveReport(app, day, report){
+        console.log('Save', app+'@'+day ,'to disk');
         let file        = path.join(baseDir, app, day.toString())
         let writable    = fs.createWriteStream(file)
         SAD.encode(report, writable)
@@ -239,7 +271,7 @@ if(cluster.isMaster){
                     return resolve()
                 for(let i = 0;i < keys.length;i++){
                     let key         = keys[i]
-                    let endpoint    = key.substr(prefix.length, key.length - 2)
+                    let endpoint    = key.substring(prefix.length, key.length - 2)
                     report.data[endpoint]   = {
                         views   : [],
                         pos     : []
@@ -357,7 +389,7 @@ if(cluster.isMaster){
             worker.kill()
         }, 5 * 60 * 1000)
     }
-    const numCPUs   = 1 || require('os').cpus().length - 1
+    const numCPUs   = require('os').cpus().length - 1
     for(let i = 0;i < numCPUs;i++){
         fork()
     }

@@ -19,7 +19,8 @@
      'chart.js',
      'sa.dashboard',
      'sa.view',
-     'sa.archives'
+     'sa.archives',
+     'sa.archives.view'
  ]);
  $app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
      $locationProvider.html5Mode(true);
