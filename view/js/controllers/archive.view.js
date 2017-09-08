@@ -80,6 +80,16 @@
             $scope.loading  = false
             $scope.time     = time
             $scope.total    = total
+            let i = -1
+            $scope.polarData= Array.apply(null, Array(endpoints.length)).map(function(){
+                i++
+                return total[i]
+            })
+            $scope.polarType= 'polarArea'
+            $scope.togglePolar = function () {
+                $scope.polarType = $scope.polarType === 'polarArea' ?
+                'pie' : 'polarArea';
+            }
             $scope.endpoints= endpoints
         })
      }
