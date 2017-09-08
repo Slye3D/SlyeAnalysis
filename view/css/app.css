@@ -1,0 +1,45 @@
+.page-content{
+    margin: 15px;
+}
+
+.app-card.mdl-card {
+  width: 400px;
+  height: 50px;
+  min-height: 130px;
+  background: #3E4EB8;
+  margin-left: 5px;
+}
+.app-card > .mdl-card__actions {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.app-card > .mdl-card__title {
+  align-items: flex-start;
+}
+.app-card > .mdl-card__title > h4 {
+  margin-top: 0;
+}
+.app-card > .mdl-card__actions {
+  display: flex;
+  box-sizing:border-box;
+  align-items: center;
+}
+.app-card > .mdl-card__actions > .material-icons {
+  padding-right: 10px;
+}
+.app-card > .mdl-card__title,
+.app-card > .mdl-card__actions,
+.app-card > .mdl-card__actions > .mdl-button {
+  color: #fff;
+}
+
+.chart-overview-card{
+    width: 100%;
+    min-height: 300px;
+    height: 330px;
+}
+.chart-overview-card .mdl-card__title{
+    height: 20px;
+}
+.chart-overview-card canvas{
+    /*height: 290px !important;*/
+}
