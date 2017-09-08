@@ -37,6 +37,7 @@
      function parseData(){
          let data       = _res.data
          let time       = data.date
+         let total      = []
          data           = data.data
          let r          = {
              'total': [[]],
@@ -45,31 +46,40 @@
              }
          }
         let endpoints  = Object.keys(data)
+        endpoints.sort()
         if(endpoints.length == 0)
             return
         let len = data[endpoints[0]].views.length
         r.total[0] = Array.apply(null, Array(len)).map(Number.prototype.valueOf,0)
+        total = Array.apply(null, Array(endpoints.length + 1)).map(Number.prototype.valueOf,0)
         for(let endpoint in data){
             r.e[endpoint] = [[]]
         }
+
         let labels = []
         let delta   = new Date()
         delta = delta.getTimezoneOffset() * 60 * 1000 * $scope.utc
+
         for(let i = 0;i < len;i++){
             let d = new Date((time + (i + 1) * 10 * 60) * 1000 + delta)
-
             labels.push(d)
-            for(let endpoint in data){
-                r.total[0][i] += data[endpoint].views[i]
-                r.e[endpoint][0].push(data[endpoint].views[i])
+
+            for(let epi = 0;epi < endpoints.length;epi++){
+                let endpoint    = endpoints[epi]
+                let v           = data[endpoint].views[i]
+                r.total[0][i]   += v
+                r.e[endpoint][0].push(v)
+                total[epi]  += v
+                total[total.length - 1] += v
             }
         }
+
         $timeout(function(){
             $scope.labels   = labels
             $scope.data     = r
             $scope.loading  = false
             $scope.time     = time
-            endpoints.sort()
+            $scope.total    = total
             $scope.endpoints= endpoints
         })
      }

@@ -27,6 +27,7 @@
   <main class="mdl-layout__content">
     <div class="page-content">
         <div class="mdl-spinner mdl-js-spinner is-active" ng-show="loading"></div>
+        <h2 ng-hide="loading">Real-time charts</h2>
         <div class="mdl-grid" ng-hide="loading">
             <div class="chart-overview-card mdl-card mdl-shadow--2dp">
               <div class="mdl-card__title mdl-card--expand">
@@ -35,10 +36,20 @@
                   chart-dataset-override="datasetOverride" chart-click="onClick"
                   ></canvas>
               </div>
+              <div class="mdl-card__actions mdl-card--border">
+                  <div class="mdl-grid">
+                      <h3>Total</h3>
+                      <div class="mdl-layout-spacer"></div>
+                      <h4 id="num-total" class="total-num">{{total[total.length - 1] | nrFormat}}</h4>
+                      <div class="mdl-tooltip mdl-tooltip--large" for="num-total">
+                          {{total[total.length - 1]}}
+                      </div>
+                  </div>
+              </div>
             </div>
 
-            <div class="mdl-cell mdl-cell--6-col" ng-repeat="endpoint in endpoints">
-                <div class="chart-overview-card mdl-card mdl-shadow--2dp">
+            <div class="mdl-cell mdl-cell--6-col" ng-repeat="(key, endpoint) in endpoints">
+                <div class="chart-endpoint-card mdl-card mdl-shadow--2dp">
                   <div class="mdl-card__title mdl-card--expand">
                       <canvas id="line" class="chart chart-line" chart-data="data['e'][endpoint]"
                       chart-labels="labels" chart-series="series" chart-options="options"
@@ -46,7 +57,11 @@
                       ></canvas>
                   </div>
                   <div class="mdl-card__actions mdl-card--border">
-                      <h3>{{endpoint}}</h3>
+                      <div class="mdl-grid">
+                          <h3>{{endpoint}}</h3>
+                          <div class="mdl-layout-spacer"></div>
+                          <h4 class="total-num" title="{{total[key]}}">{{total[key] | nrFormat}}</h4>
+                      </div>
                   </div>
                 </div>
             </div>

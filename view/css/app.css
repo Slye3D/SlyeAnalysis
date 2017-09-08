@@ -35,11 +35,15 @@
 .chart-overview-card{
     width: 100%;
     min-height: 300px;
+    height: 500px;
+}
+
+.chart-endpoint-card{
+    width: 100%;
+    min-height: 300px;
     height: 330px;
 }
-.chart-overview-card .mdl-card__title{
-    height: 20px;
-}
-.chart-overview-card canvas{
-    /*height: 290px !important;*/
+
+.total-num{
+    padding-right: 30px;
 }

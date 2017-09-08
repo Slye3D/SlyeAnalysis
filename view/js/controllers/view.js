@@ -42,12 +42,14 @@
         // }
     }
 
-    $scope.data = {}
-    $scope.endpoints = []
+    $scope.data         = {}
+    $scope.endpoints    = []
+    $scope.total        = []
 
     function data2ChartData(){
         let time            = parseInt(Date.now() / 1000)
         let endpoints       = Object.keys(data)
+        let total           = []
         endpoints.sort()
         let d  = {
             ':total': [[]],
@@ -55,21 +57,29 @@
         }
         for(let i = 0;i < endpoints.length;i++){
             d['e'][endpoints[i]] = [[]]
+            total.push(0)
         }
+        total.push(0)
+        let e = total.length - 1
         // i = time - n
         // i is timestamp
         // loop for last n seconds
         for(let i = time - lastNSec,j=0;i < time + 1;i++,j++){
             d[':total'][0].push(0)
-            for(let endpoint in data){
+            for(let epi = 0;epi < endpoints.length;epi++){
+                let endpoint = endpoints[epi]
                 let v = data[endpoint][i] || 0
                 d[':total'][0][j] += v
                 d['e'][endpoint][0].push(v)
+                // console.log(epi, endpoint);
+                total[epi] += v
+                total[e] += v
             }
         }
         $timeout(function(){
             $scope.data         = d
             $scope.endpoints    = endpoints
+            $scope.total        = total
         })
     }
     $interval(data2ChartData, 1000)
