@@ -30,4 +30,7 @@
  }]);
 $app.run(function($rootScope){
     $rootScope.socket = io()
+    $rootScope.$on('$routeChangeStart', function(){
+        $rootScope.socket.emit('set_app', '!@#$%^&*&T^^E%$ER$%$#%$')
+    })
 })

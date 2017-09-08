@@ -104,11 +104,25 @@ function setUpHTTP(redis, SAD){
             if(!CLIENTS[app])
                 CLIENTS[app] = []
             if(currentApp){
-                CLIENTS[app][id]    = null
+                CLIENTS[currentApp][id]    = null
             }
             CLIENTS[app].push(socket)
             id = CLIENTS[app].length - 1
             currentApp = app
+
+            redis.smembers('SA:EP:' + app, (err, re) => {
+                if(err)
+                    return
+                if(!re)
+                    return
+                re.map(endpoint => {
+                    socket.emit('views-' + app, {
+                        time    : 0,
+                        value   : 0,
+                        endpoint: endpoint
+                    })
+                })
+            })
 
             let time = parseInt(Date.now() / 1000)
             for(let t = time - 125;t < time + 1;t++){
@@ -198,6 +212,7 @@ if(cluster.isMaster){
     const commands = {
         views({app, time, data}){
             for(let endpoint in data){
+                redis.sadd('SA:EP:' + app, endpoint)
                 for(let key in data[endpoint]){
                     let pos = geoip.lookup(data[endpoint][key][0])
                     pos = pos
