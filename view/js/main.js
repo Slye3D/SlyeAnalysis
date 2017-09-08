@@ -18,7 +18,8 @@
      'ngRoute',
      'chart.js',
      'sa.dashboard',
-     'sa.view'
+     'sa.view',
+     'sa.archives'
  ]);
  $app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
      $locationProvider.html5Mode(true);

@@ -17,7 +17,8 @@
   <div class="mdl-layout__drawer">
     <span class="mdl-layout-title">{{app}}</span>
     <nav class="mdl-navigation">
-      <a class="mdl-navigation__link" ng-repeat="app in apps track by $id" ng-href="/view/{{app}}">{{app}}</a>
+          <a class="mdl-navigation__link mdl-navigation__link--current" ng-href="/view/{{app}}">Real-time stats</a>
+          <a class="mdl-navigation__link" ng-href="/view/{{app}}/archives">Archives</a>
     </nav>
   </div>
   <main class="mdl-layout__content">
