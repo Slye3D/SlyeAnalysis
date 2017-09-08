@@ -22,7 +22,9 @@
      'sa.archives',
      'sa.archives.view'
  ]);
- $app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+ $app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider, ChartJsProvider) {
+     Chart.defaults.global.elements.line.fill = false
+     Chart.defaults.global.colors = [ '#3E4EB8', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360']
      $locationProvider.html5Mode(true);
      $routeProvider.otherwise({
          redirectTo: '/'

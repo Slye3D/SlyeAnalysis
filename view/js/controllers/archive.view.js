@@ -99,7 +99,6 @@
             ticks: {
                 // stepSize: 1,
                 min: 0,
-                max: 50,
                 autoSkip: false
             }
           }
