@@ -223,7 +223,6 @@ if(cluster.isMaster){
     }
 
     function saveApp2Disk(app, day){
-        console.log('trying to save app', app);
         return new Promise((resolve, reject) => {
             let prefix  = 'SA:' + day + ':' + app + ':'
             let report  = {
@@ -341,7 +340,7 @@ if(cluster.isMaster){
             }
         }
         next()
-    }, 10 * 1000)
+    }, 3 * 60 * 1000)
 
     function messageHandler(msg){
         if(msg.cmd && typeof commands[msg.cmd] == 'function'){
