@@ -57,7 +57,7 @@ function setUpHTTP(redis, SAD){
 
             function proc(report){
                 let day = parseInt(parseInt(Date.now() / 1000) / (24 * 3600)) * 24 * 3600
-                let t = day == parseInt(file) ? 2 * 60 : 20 * 60
+                let t = day == parseInt(file) ? 1.5 * 60 : 20 * 60
                 redis.expire('SA:SAD:' + app + ':' + file, t)
 
                 if(type == 'charts'){
@@ -249,8 +249,8 @@ if(cluster.isMaster){
                             endpoint: endpoint
                         })
                     })
-                    // Keep it just for 15 min
-                    redis.expire(k, 15 * 60)
+                    // Keep it just for 2 min
+                    redis.expire(k, 2 * 60 + 10)
                 }
             }
         },

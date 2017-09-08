@@ -23,6 +23,8 @@
      'sa.archives.view'
  ]);
  $app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider, ChartJsProvider) {
+     console.log(Chart.defaults.global);
+     Chart.defaults.global.elements.line.tension = 0.000000001
      Chart.defaults.global.elements.line.fill = false
      Chart.defaults.global.colors = [ '#3E4EB8', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360']
      $locationProvider.html5Mode(true);

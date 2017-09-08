@@ -99,7 +99,16 @@
             ticks: {
                 // stepSize: 1,
                 min: 0,
-                autoSkip: false
+                autoSkip: false,
+                callback: function(label, index, labels) {
+                    if(label > 1000)
+                        return label/1000+'k'
+                    return label
+                }
+            },
+            scaleLabel: {
+                display: true,
+                labelString: 'Req/10Min'
             }
           }
       ],

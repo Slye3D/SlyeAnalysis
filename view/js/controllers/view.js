@@ -97,6 +97,10 @@
                 // stepSize: 1,
                 min: 0,
                 autoSkip: false
+            },
+            scaleLabel: {
+                display: true,
+                labelString: 'Req/S'
             }
           }
       ],
