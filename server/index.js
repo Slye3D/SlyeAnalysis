@@ -15,7 +15,17 @@ const lzma      = require('lzma')
 const mkdirp    = require('mkdirp')
 const fs        = require('fs')
 const path      = require('path')
-const baseDir   = '/var/SA'
+const os        = require('os')
+
+const baseDir   = (function(){
+    let home    = os.homedir()
+    if(process.platform == 'win32')
+        return path.resolve(home, 'Slye Analysis')
+    if(process.getuid && process.getuid() === 0)
+        return '/var/SA'
+    return path.resolve(home, '.SA')
+})()
+
 const CLIENT_PORT   = 9898
 const VIEW_PORT     = 9899
 
