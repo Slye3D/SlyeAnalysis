@@ -104,6 +104,11 @@
                 display: false
             }]
     },
+    elements: {
+        point:{
+            radius: 0
+        }
+    },
     maintainAspectRatio: false,
     animation : false,
     showTooltips: false,

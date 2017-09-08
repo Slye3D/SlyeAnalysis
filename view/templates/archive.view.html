@@ -8,6 +8,12 @@
       <div class="mdl-layout-spacer"></div>
       <!-- Navigation. We hide it in small screens. -->
       <nav class="mdl-navigation mdl-layout--large-screen-only">
+      <button ng-click="toggleUTC()" class="mdl-navigation__link mdl-button mdl-js-button mdl-button--icon" ng-show='utc'>
+          <i class="material-icons">alarm</i>
+      </button>
+      <button ng-click="toggleUTC()" class="mdl-navigation__link mdl-button mdl-js-button mdl-button--icon" ng-hide='utc'>
+          <i class="material-icons">alarm_off</i>
+      </button>
         <a href="/" class="mdl-navigation__link mdl-button mdl-js-button mdl-button--icon">
             <i class="material-icons">home</i>
         </a>

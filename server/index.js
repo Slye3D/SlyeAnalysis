@@ -292,7 +292,7 @@ if(cluster.isMaster){
                         pos     : []
                     }
                     // (24 * 3600) / (10 * 60) + 1 = 145
-                    for(let j = 0;j < 145;j++)
+                    for(let j = 0;j < 144;j++)
                         report.data[endpoint].views.push(0)
                     tasks++
                     redis.zrange(key, 0, -1, 'withscores', (err, re) => {

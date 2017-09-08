@@ -24,57 +24,69 @@
      })
      $scope.app     = $routeParams.app
      $scope.file    = $routeParams.archive
+     $scope.utc     = true
+     let _res
+
+     $scope.toggleUTC   = function(){
+         $timeout(function(){
+             $scope.utc = !$scope.utc
+             parseData()
+         })
+     }
+
+     function parseData(){
+         let data       = _res.data
+         let time       = data.date
+         data           = data.data
+         let r          = {
+             'total': [[]],
+             'e': {
+
+             }
+         }
+        let endpoints  = Object.keys(data)
+        if(endpoints.length == 0)
+            return
+        let len = data[endpoints[0]].views.length
+        r.total[0] = Array.apply(null, Array(len)).map(Number.prototype.valueOf,0)
+        for(let endpoint in data){
+            r.e[endpoint] = [[]]
+        }
+        let labels = []
+        let delta   = new Date()
+        delta = delta.getTimezoneOffset() * 60 * 1000 * $scope.utc
+        for(let i = 0;i < len;i++){
+            let d = new Date((time + (i + 1) * 10 * 60) * 1000 + delta)
+
+            labels.push(d)
+            for(let endpoint in data){
+                r.total[0][i] += data[endpoint].views[i]
+                r.e[endpoint][0].push(data[endpoint].views[i])
+            }
+        }
+        $timeout(function(){
+            $scope.labels   = labels
+            $scope.data     = r
+            $scope.loading  = false
+            $scope.time     = time
+            endpoints.sort()
+            $scope.endpoints= endpoints
+        })
+     }
+
      $scope.updateData  = function(){
          $timeout(function(){$scope.loading = true})
          $http.get("/archives/" + $scope.app + '/' + $scope.file).then(function(response) {
-             $timeout(function(){
-                 let data       = response.data
-                 let time       = data.date
-                 data           = data.data
-                 let r          = {
-                     'total': [[]],
-                     'e': {
-
-                     }
-                 }
-                let endpoints  = Object.keys(data)
-                if(endpoints.length == 0)
-                    return
-                let len = data[endpoints[0]].views.length
-                r.total[0] = Array.apply(null, Array(len)).map(Number.prototype.valueOf,0)
-                for(let endpoint in data){
-                    r.e[endpoint] = [[]]
-                }
-                let labels = []
-                for(let i = 0;i < len;i++){
-                    let d = new Date(i * 10 * 60 * 1000)
-                    labels.push(
-                        d.getUTCHours() + ':' + d.getUTCMinutes() + '-' +
-                        d.getUTCHours() + ':' + (d.getUTCMinutes() + 10)
-                    )
-                    for(let endpoint in data){
-                        r.total[0][i] += data[endpoint].views[i]
-                        r.e[endpoint][0].push(data[endpoint].views[i])
-                    }
-                }
-                $timeout(function(){
-                    console.log(r);
-                    $scope.labels   = labels
-                    $scope.data     = r
-                    $scope.loading  = false
-                    $scope.time     = time
-                    endpoints.sort()
-                    $scope.endpoints= endpoints
-                })
-             }, 500)
+             _res = response
+             $timeout(parseData, 500)
         });
      }
      $scope.updateData()
 
-    $scope.series = [''];
-    $scope.data = [[]];
+    $scope.series = ['']
+    $scope.data = [[]]
 
-    $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }];
+    $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }]
     $scope.options = {
         fillColor : "#ffff00",
       scales: {
@@ -87,12 +99,21 @@
             ticks: {
                 // stepSize: 1,
                 min: 0,
+                max: 50,
                 autoSkip: false
             }
           }
       ],
       xAxes: [{
-                display: false
+                // display: false
+                type: 'time',
+                time: {
+                  unit: 'hour',
+                  displayFormats: {
+                      hour: "HH:mm",
+                      minute: "HH:mm"
+                  }
+                },
             }]
     },
     maintainAspectRatio: false,
@@ -100,9 +121,22 @@
     showTooltips: false,
     tooltips: {
         callbacks: {
+            title: function(tooltipItem, data){
+                tooltipItem = tooltipItem[0]
+                let d = tooltipItem.xLabel
+                let s = new Date(d.valueOf() - 10 * 60 * 1000)
+
+                let f = x => {
+                    x = '' + x
+                    return (x.length < 2 ? '0' : '') + x
+                }
+                return (
+                    f(s.getHours()) + ':' + f(s.getMinutes()) + '-' +
+                    f(d.getHours()) + ':' + f(d.getMinutes())
+                )
+            },
             label: function(tooltipItem, data) {
-                console.log(tooltipItem, data);
-                return tooltipItem.yLabel;
+                return tooltipItem.yLabel || 0
             }
         }
     }
