@@ -47,7 +47,11 @@
                 }
                 let labels = []
                 for(let i = 0;i < len;i++){
-                    labels.push('')
+                    let d = new Date(i * 10 * 60 * 1000)
+                    labels.push(
+                        d.getUTCHours() + ':' + d.getUTCMinutes() + '-' +
+                        d.getUTCHours() + ':' + (d.getUTCMinutes() + 10)
+                    )
                     for(let endpoint in data){
                         r.total[0][i] += data[endpoint].views[i]
                         r.e[endpoint][0].push(data[endpoint].views[i])
@@ -94,12 +98,14 @@
     maintainAspectRatio: false,
     animation : false,
     showTooltips: false,
-    legend: {
-            display: false
-         },
-         tooltips: {
-            enabled: false
-         }
+    tooltips: {
+        callbacks: {
+            label: function(tooltipItem, data) {
+                console.log(tooltipItem, data);
+                return tooltipItem.yLabel;
+            }
+        }
+    }
     };
 
  });
