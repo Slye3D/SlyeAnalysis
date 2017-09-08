@@ -232,6 +232,13 @@ if(cluster.isMaster){
                     let day         = Math.floor(t / (24 * 3600)) * 24 * 3600
                     let tenMinutes  = Math.floor((t - day) / (10 * 60))
                     let prefix      = 'SA:' + day + ':' + app + ':'
+
+                    // last `10 * 60`: it's for make sure data is still in redis
+                    //   when we need to save it for last time
+                    let nextDay     = (Math.floor(t / (24 * 3600)) + 1) * 24 * 3600 + 10 * 60
+                    redis.expireat(prefix + endpoint + ':e', nextDay)
+                    redis.expireat(prefix + endpoint + ':p', nextDay)
+
                     // data.views
                     redis.zincrby(prefix + endpoint + ':e', c, tenMinutes)
                     // data.pos
