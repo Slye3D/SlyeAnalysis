@@ -121,9 +121,11 @@
                 min: 0,
                 autoSkip: false,
                 callback: function(label, index, labels) {
+                    if(Math.floor(label) < label)
+                        return ''
                     if(label > 1000)
                         return label/1000+'k'
-                    return label
+                    return Math.round(label * 10) / 10
                 }
             },
             scaleLabel: {

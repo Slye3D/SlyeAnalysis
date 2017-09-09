@@ -59,8 +59,9 @@
                   <div class="mdl-card__title mdl-card--expand">
                       <canvas class="chart-base" chart-type="polarType"
                             chart-data="polarData" chart-labels="endpoints"
-                            ng-click="togglePolar()">
+                            ng-click="togglePolar()" ng-show="total[total.length - 1]">
                         </canvas>
+                        <p ng-hide="total[total.length - 1]">No enough data to draw chart</p>
                   </div>
                 </div>
             </div>

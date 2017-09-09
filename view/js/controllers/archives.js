@@ -27,6 +27,7 @@
          $timeout(function(){$scope.loading = true})
          $http.get("/archives/" + $scope.app).then(function(response) {
              $timeout(function(){
+                 response.data.sort().reverse()
                  $scope.archives = response.data
                  $scope.loading = false
              }, 500)
