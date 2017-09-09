@@ -11,7 +11,6 @@
 
 const cluster   = require('cluster')
 const net       = require('net')
-const lzma      = require('lzma')
 const mkdirp    = require('mkdirp')
 const fs        = require('fs')
 const path      = require('path')
@@ -67,8 +66,7 @@ function setUpHTTP(redis, SAD){
 
             function proc(report){
                 let day = parseInt(parseInt(Date.now() / 1000) / (24 * 3600)) * 24 * 3600
-                let t = day == parseInt(file) ? 1.5 * 60 : 20 * 60
-                redis.expire('SA:SAD:' + app + ':' + file, t)
+                redis.expire('SA:SAD:' + app + ':' + file, 20 * 60)
 
                 if(type == 'charts'){
                     for(let endpoint in report.data){
@@ -281,6 +279,7 @@ if(cluster.isMaster){
 
     function saveReport(app, day, report){
         console.log('Save', app+'@'+day ,'to disk');
+        redis.del('SA:SAD:' + app + ':' + day)
         let file        = path.join(baseDir, app, day.toString())
         let writable    = fs.createWriteStream(file)
         SAD.encode(report, writable)

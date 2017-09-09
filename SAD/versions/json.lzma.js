@@ -8,9 +8,12 @@
  *       Copyright 2017 Slye Development Team. All Rights Reserved.
  *       Licence: MIT License
  */
+const lzma  = require('lzma')
 
 function encode(report, writableStream){
-    writableStream.write(JSON.stringify(report))
+    lzma.compress(JSON.stringify(report), 5, function(re){
+        writableStream.write(Buffer.from(re))
+    })
 }
 
 function decode(resolve, reject){
@@ -18,13 +21,15 @@ function decode(resolve, reject){
         let bufs    = []
         readableStream.on('data', function(d){ bufs.push(d) })
         readableStream.on('end', function(){
-            let b = Buffer.concat(bufs).toString()
-            try{
-                let d = JSON.parse(b)
-                resolve(d)
-            }catch(e){
-                reject()
-            }
+            let b = Buffer.concat(bufs)
+            lzma.decompress(b, function(re){
+                try{
+                    let d = JSON.parse(re)
+                    resolve(d)
+                }catch(e){
+                    reject()
+                }
+            })
         })
     }
 }

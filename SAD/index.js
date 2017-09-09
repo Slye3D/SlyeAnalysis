@@ -10,11 +10,12 @@
  */
 
 const versions  = {
-    0: require('./versions/json')
+    0: require('./versions/json'),
+    1: require('./versions/json.lzma')
 }
 
 // CV: Current Versions
-const CV    = 0
+const CV    = 1
 
 module.exports = {
      encode(report, writableStream){
