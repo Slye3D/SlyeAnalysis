@@ -85,14 +85,14 @@
                 i++
                 return total[i]
             })
-            $scope.polarType= 'polarArea'
-            $scope.togglePolar = function () {
-                $scope.polarType = $scope.polarType === 'polarArea' ?
-                'pie' : 'polarArea';
-            }
         })
     }
     $interval(data2ChartData, 1000)
+
+    $scope.polarType= 'polarArea'
+    $scope.togglePolar = function () {
+        $scope.polarType = $scope.polarType === 'polarArea' ? 'pie' : 'polarArea'
+    }
 
     $rootScope.socket.emit('set_app', $scope.app)
     $rootScope.socket.on('views-' + $scope.app, function(view){
