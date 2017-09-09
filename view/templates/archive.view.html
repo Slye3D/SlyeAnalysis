@@ -59,9 +59,17 @@
                   <div class="mdl-card__title mdl-card--expand">
                       <canvas class="chart-base" chart-type="polarType"
                             chart-data="polarData" chart-labels="endpoints"
-                            ng-click="togglePolar()" ng-show="total[total.length - 1]">
+                            ng-show="total[total.length - 1]">
                         </canvas>
                         <p ng-hide="total[total.length - 1]">No enough data to draw chart</p>
+                  </div>
+                  <div class="mdl-card__actions mdl-card--border">
+                      <div class="mdl-grid">
+                            <div class="mdl-layout-spacer"></div>
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" ng-click="togglePolar()" >
+                                Toggle chart
+                            </button>
+                      </div>
                   </div>
                 </div>
             </div>
