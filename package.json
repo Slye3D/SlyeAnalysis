@@ -2,12 +2,19 @@
   "name": "slye-analysis",
   "version": "0.5.0-beta",
   "description": "Slye's analysis panel",
-  "main": "server/index.js",
+  "main": "client/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Alireza Ghadimi <Qti3eQti3e@Gmail.com> (Qti3e)",
+  "author": "Alireza Ghadimi <Qti3eQti3e@Gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Slye-team/SlyeAnalysis.git"
+  },
+  "bin" : {
+      "slye-analysis" : "./bin/server"
+  },
   "dependencies": {
     "angular": "^1.6.6",
     "angular-chart.js": "^1.1.1",
