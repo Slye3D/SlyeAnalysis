@@ -157,29 +157,10 @@ function setUpHTTP(redis, SAD){
             USERS[uId]  = null
         })
     })
-
-
-    // setInterval(function(){
-    //     let t = Math.floor(Date.now() / 1000)
-    //     Apps.map(app => {
-    //         let k   = 'SA:WS:' + app + ':' + t
-    //         redis.zrange(key, 0, -1, 'withscores', (err, re) => {
-    //             // re = [endpoint, val, endpoint, val, ...]
-    //             for(let j = 0;j < re.length;j += 2){
-    //                 let endpoint    = re[j]
-    //                 let value       = parseInt(re[j + 1])
-    //                 emitToApp(app, 'views', {
-    //                     time    : t,
-    //                     value   : value,
-    //                     endpoint: endpoint
-    //                 })
-    //             }
-    //         })
-    //     })
-    // }, 1000)
 }
 
-function emitToApp(app, ch, data){
+
+function _emitToApp(app, ch, data){
     if(!CLIENTS[app])
         return
     for(let i = 0;i < CLIENTS[app].length;i++){
@@ -189,6 +170,45 @@ function emitToApp(app, ch, data){
             }catch(e){}
         }
     }
+}
+
+let queue = {
+    // app: {
+    //     endpoint: {
+    //          time: value
+    //     }
+    // }
+}
+
+setInterval(function(){
+    for(let app in queue){
+        for(let endpoint in queue[app]){
+            for(let time in queue[app][endpoint]){
+                let value   = queue[app][endpoint][time]
+                if(value){
+                    _emitToApp(app, 'views-' + app, {
+                        time,
+                        endpoint,
+                        value
+                    })
+                    queue[app][endpoint][time]  = null
+                }
+            }
+        }
+    }
+}, 500)
+
+function emitToApp(app, ch, data){
+    let {time, value, endpoint} = data
+    if(!queue[app])
+        queue[app] = {}
+    if(!queue[app][endpoint])
+        queue[app][endpoint] = {}
+    if(queue[app][endpoint][time]){
+        if(queue[app][endpoint][time] < value)
+            return
+    }
+    queue[app][endpoint][time] = value
 }
 
 function emitToAll(ch, data){

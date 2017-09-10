@@ -80,7 +80,7 @@ function connect(host, port, app){
         // [time, endpoint, ip]
     ]
 
-    setInterval(function(){
+    function sendReport(){
         if(views.length > 0){
             let v = views.map(x => x)
             views = []
@@ -104,10 +104,33 @@ function connect(host, port, app){
             }
             sendData(JSON.stringify(r))
         }
-    }, 900)
+    }
+
+    let requests = 0
+
+    setInterval(function(){
+        requests = 0
+    }, 1100)
+
+    function getSpeed(){
+        return requests / 1100 * 1000
+    }
+
+    function interval(){
+        sendReport()
+        let speed   = getSpeed()
+        if(speed > 300){
+            setTimeout(interval, 1500)
+        }else{
+            setTimeout(interval, 1000)
+        }
+    }
+
+    setTimeout(interval, 1000)
 
     return {
         view(req, endpoint){
+            requests++
             // x-real-ip
             // you should set this header on your nginx configs
             // proxy_set_header  X-Real-IP  $remote_addr;
