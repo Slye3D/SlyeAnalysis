@@ -1,6 +1,8 @@
 # SlyeAnalysis
 Slye's analysis panel
 
+![SlyeAnalysis](./screen_shots/photo_2017-10-26_15-21-01.jpg)
+
 # Running server
 Install the server globally:
 ```
