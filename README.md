@@ -27,7 +27,7 @@ somewhere else:
 ```js
 app.get('/someWhere', function(req, res, next){
     ...
-    req.app.get('Analysis').view('req', 'my.awsome.endpoint')
+    req.app.get('Analysis').view(req, 'my.awsome.endpoint')
     ...
 })
 ```
