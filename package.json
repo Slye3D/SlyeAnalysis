@@ -1,31 +1,31 @@
 {
-  "name": "slye-analysis",
-  "version": "0.5.0-beta",
-  "description": "Slye's analysis panel",
-  "main": "client/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Alireza Ghadimi <Qti3eQti3e@Gmail.com>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Slye-team/SlyeAnalysis.git"
-  },
-  "bin" : {
-      "slye-analysis" : "./bin/server"
-  },
-  "dependencies": {
-    "angular": "^1.6.6",
-    "angular-chart.js": "^1.1.1",
-    "angular-route": "^1.6.6",
-    "express": "^4.15.4",
-    "geoip-lite": "^1.2.1",
-    "lzma": "^2.3.2",
-    "material-design-lite": "^1.3.0",
-    "mkdirp": "^0.5.1",
-    "moment": "^2.18.1",
-    "redis": "^2.8.0",
-    "socket.io": "^2.0.3"
-  }
+	"name": "slye-analysis",
+	"version": "0.5.0-beta",
+	"description": "Slye's analysis panel",
+	"main": "client/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Parsa Ghadimi <Qti3eQti3e@Gmail.com>",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Slye-team/SlyeAnalysis.git"
+	},
+	"bin": {
+		"slye-analysis": "./bin/server"
+	},
+	"dependencies": {
+		"angular": "^1.6.6",
+		"angular-chart.js": "^1.1.1",
+		"angular-route": "^1.6.6",
+		"express": "^4.15.4",
+		"geoip-lite": "^1.2.1",
+		"lzma": "^2.3.2",
+		"material-design-lite": "^1.3.0",
+		"mkdirp": "^0.5.1",
+		"moment": "^2.18.1",
+		"redis": "^2.8.0",
+		"socket.io": "^2.0.3"
+	}
 }
